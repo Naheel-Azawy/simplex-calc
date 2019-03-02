@@ -31,6 +31,9 @@
              margin-left:  40px;
              margin-right: 40px;
          }
+         .item_l {
+             margin-left: 40px;
+         }
         </style>
     </head>
     <body>
@@ -87,9 +90,9 @@
              let v = (i, j) => (a ? a[i][j] : '');
              constr_table.innerHTML = '';
              for (let i = 0; i < c; ++i) {
-                 constr_table.innerHTML += `<tr>
-                            <input id="constr_${i}" class="item" value="${v(i, 0)}"> ≤
-                            <input size="5" id="constr_le_${i}" value="${v(i, 1)}"></tr>`;
+                 constr_table.innerHTML += `<tr><div style="overflow: hidden;white-space: nowrap;">
+                            <input size="10" id="constr_${i}" class="item_l" value="${v(i, 0)}"> ≤
+                            <input size="5" id="constr_le_${i}" value="${v(i, 1)}"></div></tr>`;
              }
          }
 
