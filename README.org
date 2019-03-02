@@ -1,0 +1,4 @@
+* Simplex Calculator
+  A simple calculator that maximizes a system of equations using the simplex method showing all steps
+** License
+   GPL
