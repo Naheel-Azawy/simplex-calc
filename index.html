@@ -1,76 +1,58 @@
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Simplex Calculator</title>
-        <style>
-         body {
-             background-color: #000000;
-             color:            #ffffff;
-             font-family:      monospace;
-         }
-         main {
-             position: relative;
-             height:   96%;
-             width:    98%;
-             margin:   0 auto;
-             padding:  1%;
-         }
-         button {
-             background-color: #000000;
-             color:            #ffffff;
-         }
-         select {
-             background-color: #000000;
-             color:            #ffffff;
-         }
-         input {
-             background-color: #000000;
-             color:            #ffffff;
-         }
-         .item {
-             margin-left:  40px;
-             margin-right: 40px;
-         }
-         .item_l {
-             margin-left: 40px;
-         }
-        </style>
-    </head>
-    <body>
-        <main>
-            <table>
-                <tr><h1 align="center">Simplex Calculator</h1></tr>
-                <tr><h1 align="center">------------------</h1></tr>
-                <tr><h4 align="center">
-                    By <a href="https://naheel-azawy.github.io">Naheel</a> - Source at <a href="https://github.com/Naheel-Azawy/simplex-calc">GitHub</a>
-                </h4></tr>
-                <tr><h3 class="item">Objective (Maximize):</h3></tr>
-                <tr>
-                    <div class="item">z = <input id="obj"></div>
-                </tr>
-
-                <tr><h3 class="item">Number of constrains:</h3></tr>
-                <tr><select id="constr_cnt" class="item" onchange="set_constr(this.value)">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select></tr>
-
-                <tr><h3 class="item">Constrains:</h3></tr>
-                <table id="constr_table"></table>
-                <br><br>
-                <tr><button class="item" onclick="run()">CALCULATE</button></tr>
-                <br><br>
-                <tr><button class="item" onclick="ex();run()">RUN EXAMPLE</button></tr>
-                <br><br>
-                <tr><td><h3 class="item"><pre id="con"></pre></h3></td></tr>
-            </table>
-        </main>
-        <script src="main.js"></script>
-        <script>
-
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplex Calculator</title>
+    <style>
+        body, button, select, input {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: monospace;
+        }
+        main {
+            position: relative;
+            height: 96%;
+            width: 98%;
+            margin: 0 auto;
+            padding: 1%;
+        }
+        .item {
+            margin-left: 40px;
+            margin-right: 40px;
+        }
+        .item_l {
+            margin-left: 40px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1 align="center">Simplex Calculator</h1>
+        <h1 align="center">------------------</h1>
+        <h4 align="center">By
+            <a href="https://naheel-azawy.github.io">Naheel</a>
+            - Source at <a href="https://github.com/Naheel-Azawy/simplex-calc">GitHub</a>
+        </h4>
+        <h3 class="item">Objective (Maximize):</h3>
+        <div class="item">z = <input id="obj"></div>
+        <h3 class="item">Number of constrains:</h3>
+        <select id="constr_cnt" class="item" onchange="set_constr(this.value)">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+        <h3 class="item">Constrains:</h3>
+        <table id="constr_table"></table>
+        <br>
+        <button class="item" onclick="run()">CALCULATE</button>
+        <br><br>
+        <button class="item" onclick="ex();run()">RUN EXAMPLE</button>
+        <br><br>
+        <h3 class="item"><pre id="con"></pre></h3>
+    </main>
+    <script src="main.js"></script>
+    <script>
          let con = document.getElementById("con");
          let print = s => con.innerHTML += s.split("\n").join("<br>") + "<br>";
          let clear = () => con.innerHTML = '';
@@ -90,9 +72,10 @@
              let v = (i, j) => (a ? a[i][j] : '');
              constr_table.innerHTML = '';
              for (let i = 0; i < c; ++i) {
-                 constr_table.innerHTML += `<tr><div style="overflow: hidden;white-space: nowrap;">
-                            <input size="10" id="constr_${i}" class="item_l" value="${v(i, 0)}"> ≤
-                            <input size="5" id="constr_le_${i}" value="${v(i, 1)}"></div></tr>`;
+                 constr_table.innerHTML +=
+                     `<tr><div style="overflow: hidden;white-space: nowrap;">
+                       <input size="10" id="constr_${i}" class="item_l" value="${v(i, 0)}"> ≤
+                       <input size="5" id="constr_le_${i}" value="${v(i, 1)}"></div></tr>`;
              }
          }
 
@@ -131,7 +114,6 @@
          }
 
          ex();
-
-        </script>
-    </body>
+    </script>
+</body>
 </html>
