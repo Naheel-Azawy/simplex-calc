@@ -1,15 +1,13 @@
-
-function calc(objective, constrains, print) {
-
-    const printtitle1 = s =>
-          { print("* "  + s + "\n" + "=".repeat(s.length + 2) + "\n"); };
-    const printtitle2 = s =>
-          { print("** " + s + "\n" + "~".repeat(s.length + 3) + "\n"); };
+function build_mat(objective, constrains) {
 
     const clean = s => {
-        s = s.split(' ').join('');   // remove spaces
-        s = s.split('-').join('+-'); // keep -ve signes
-        s = s.split('+');            // split terms
+        s = s.split(' ').join('');     // remove spaces
+        s = s.split('-').join('+-');   // keep -ve signes
+        if (s.startsWith("+-")) {      // if starts with "+-"
+            s = s.substring(1);        // remove the first "+"
+        }
+        s = s.split('-x').join('-1x'); // fix -x
+        s = s.split('+');              // split terms
         let a = new Array(s.length).fill(0);
         for (let i in a) {
             let t = s[i].split('x');
@@ -20,10 +18,10 @@ function calc(objective, constrains, print) {
     };
 
     // clean input data
-    objective = clean(objective);
     for (let i in constrains) {
         constrains[i][0] = clean(constrains[i][0]);
     }
+    objective = clean(objective);
 
     // constrains + objective
     let rows = constrains.length + 1;
@@ -54,6 +52,16 @@ function calc(objective, constrains, print) {
         m[rows - 1][i] = objective[i] * -1;
     }
     m[rows - 1][cols - 2] = 1;
+
+    return m;
+}
+
+function calc_mat(m, print) {
+
+    const printtitle1 = s =>
+          { print("* "  + s + "\n" + "=".repeat(s.length + 2) + "\n"); };
+    const printtitle2 = s =>
+          { print("** " + s + "\n" + "~".repeat(s.length + 3) + "\n"); };
 
     const mround = n => Math.round(n * 100) / 100;
 
@@ -158,7 +166,7 @@ function calc(objective, constrains, print) {
         min = m[0][m[0].length - 1] / m[0][min_i];
         let min_j = 0;
         let tmp;
-        for (let j in constrains) {
+        for (let j = 0; j < m.length - 1; ++j) {
             tmp = m[j][m[0].length - 1] / m[j][min_i];
             if (tmp < min) {
                 min = tmp;
@@ -196,7 +204,11 @@ function calc(objective, constrains, print) {
 
 }
 
-function test() {
+function calc(objective, constrains, print) {
+    calc_mat(build_mat(objective, constrains), print);
+}
+
+function test0() {
     const print = s => console.log(s);
     let objective = '20x1+40x2';
     let constrains = [
@@ -207,4 +219,53 @@ function test() {
     calc(objective, constrains, print);
 }
 
-//test();
+function test1() {
+    const print = s => console.log(s);
+    calc_mat([
+        [ 1, 4, 3, 1, 0, 0, 56 ],
+        [ 2, 2, 1, 0, 1, 0, 18 ],
+        [ -1, -4, -2, 0, 0, 1, 0]
+    ], print);
+}
+
+function test2() {
+    const print = s => console.log(s);
+    calc_mat([
+        [ 1, 2, 4, 1, 0, 0, 8 ],
+        [ 4, 4, 1, 0, 1, 0, 10 ],
+        [ -5, -20, 1, 0, 0, 1, 0]
+    ], print);
+}
+
+function test3() {
+    const print = s => console.log(s);
+    let objective = '10x1+3x2+x3';
+    let constrains = [
+        [ 'x1+5x2+5x3', 113 ],
+        [ 'x1+2x2+9x3', 236 ]
+    ];
+    calc(objective, constrains, print);
+}
+
+function test4() {
+    const print = s => console.log(s);
+    let objective = '2x1+3x2';
+    let constrains = [
+        [ '-2x1+x2', 14 ],
+        [ '-x1+x2', 35 ],
+        [ 'x2', 42 ]
+    ];
+    calc(objective, constrains, print);
+}
+
+function test5() {
+    const print = s => console.log(s);
+    let objective = '13x1+13x2';
+    let constrains = [
+        [ '2x1+x2', 2 ],
+        [ 'x1+2x2', 26 ]
+    ];
+    calc(objective, constrains, print);
+}
+
+//test5();
