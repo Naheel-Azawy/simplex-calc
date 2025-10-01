@@ -29,12 +29,12 @@
         <h1 align="center">Simplex Calculator</h1>
         <h1 align="center">------------------</h1>
         <h4 align="center">By
-            <a href="https://naheel-azawy.github.io">Naheel</a>
+            <a href="https://naheel.xyz">Naheel</a>
             - Source at <a href="https://github.com/Naheel-Azawy/simplex-calc">GitHub</a>
         </h4>
         <h3 class="item">Objective (Maximize):</h3>
         <div class="item">z = <input id="obj"></div>
-        <h3 class="item">Number of constrains:</h3>
+        <h3 class="item">Number of constraints:</h3>
         <select id="constr_cnt" class="item" onchange="set_constr(this.value)">
             <option>1</option>
             <option>2</option>
@@ -42,7 +42,7 @@
             <option>4</option>
             <option>5</option>
         </select>
-        <h3 class="item">Constrains:</h3>
+        <h3 class="item">Constraints:</h3>
         <table id="constr_table"></table>
         <br>
         <button class="item" onclick="run()">CALCULATE</button>
@@ -51,7 +51,7 @@
         <br><br>
         <h3 class="item"><pre id="con"></pre></h3>
     </main>
-    <script src="main.js"></script>
+    <script src="simplex.js"></script>
     <script>
          let con = document.getElementById("con");
          let print = s => con.innerHTML += s.split("\n").join("<br>") + "<br>";
@@ -74,7 +74,7 @@
              for (let i = 0; i < c; ++i) {
                  constr_table.innerHTML +=
                      `<tr><div style="overflow: hidden;white-space: nowrap;">
-                       <input size="10" id="constr_${i}" class="item_l" value="${v(i, 0)}"> ≤
+                       <input size="10" id="constr_${i}" class="item_l" value="${v(i, 0)}"> &le;
                        <input size="5" id="constr_le_${i}" value="${v(i, 1)}"></div></tr>`;
              }
          }
@@ -100,17 +100,17 @@
          }
 
          function ex() {
-             set_obj('20x1 + 40x2');
+             set_obj("20x1 + 40x2");
              set_constr([
-                 [ '4x1 + 3x2', 168 ],
-                 [ '2x1 + 3x2', 108 ],
-                 [ 'x1 + 3x2',  96  ]
+                 [ "4x1 + 3x2", 168 ],
+                 [ "2x1 + 3x2", 108 ],
+                 [ "x1 + 3x2",  96  ]
              ]);
          }
 
          function run() {
              clear();
-             calc(get_obj(), get_constr(), print);
+             simplex.calc(get_obj(), get_constr(), print);
          }
 
          ex();

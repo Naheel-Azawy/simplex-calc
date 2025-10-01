@@ -1,5 +1,6 @@
-function build_mat(objective, constrains) {
+const simplex = (() => {
 
+function build_mat(objective, constraints) {
     const clean = s => {
         s = s.split(' ').join('');     // remove spaces
         s = s.split('-').join('+-');   // keep -ve signes
@@ -18,15 +19,15 @@ function build_mat(objective, constrains) {
     };
 
     // clean input data
-    for (let i in constrains) {
-        constrains[i][0] = clean(constrains[i][0]);
+    for (let i in constraints) {
+        constraints[i][0] = clean(constraints[i][0]);
     }
     objective = clean(objective);
 
-    // constrains + objective
-    let rows = constrains.length + 1;
+    // constraints + objective
+    let rows = constraints.length + 1;
     // number of 'x' terms + slack + 'z'
-    let cols = objective.length + constrains.length + 1 + 1;
+    let cols = objective.length + constraints.length + 1 + 1;
 
     // create the matrix
     let m = new Array(rows).fill(0);
@@ -34,16 +35,16 @@ function build_mat(objective, constrains) {
         m[i] = new Array(cols).fill(0);
     }
 
-    // fill the matrix (constrains)
-    for (let i in constrains) {
-        for (let j in constrains[i][0]) {
-            m[i][j] = constrains[i][0][j];
+    // fill the matrix (constraints)
+    for (let i in constraints) {
+        for (let j in constraints[i][0]) {
+            m[i][j] = constraints[i][0][j];
         }
-        m[i][cols - 1] = constrains[i][1];
+        m[i][cols - 1] = constraints[i][1];
     }
 
     // fill the matrix (slacks)
-    for (let i = 0; i < constrains.length; ++i) {
+    for (let i = 0; i < constraints.length; ++i) {
         m[i][objective.length + i] = 1;
     }
 
@@ -56,7 +57,7 @@ function build_mat(objective, constrains) {
     return m;
 }
 
-function calc_mat(m, print) {
+function calc_mat(m, print=console.log) {
 
     const printtitle1 = s =>
           { print("* "  + s + "\n" + "=".repeat(s.length + 2) + "\n"); };
@@ -204,68 +205,13 @@ function calc_mat(m, print) {
 
 }
 
-function calc(objective, constrains, print) {
-    calc_mat(build_mat(objective, constrains), print);
+function calc(objective, constraints, print=console.log) {
+    calc_mat(build_mat(objective, constraints), print);
 }
 
-function test0() {
-    const print = s => console.log(s);
-    let objective = '20x1+40x2';
-    let constrains = [
-        [ '4x1+3x2', 168 ],
-        [ '2x1+3x2', 108 ],
-        [ 'x1+3x2',  96  ]
-    ];
-    calc(objective, constrains, print);
-}
+return {calc, calc_mat, build_mat};
+})();
 
-function test1() {
-    const print = s => console.log(s);
-    calc_mat([
-        [ 1, 4, 3, 1, 0, 0, 56 ],
-        [ 2, 2, 1, 0, 1, 0, 18 ],
-        [ -1, -4, -2, 0, 0, 1, 0]
-    ], print);
+if (typeof module != "undefined") {
+    module.exports = simplex;
 }
-
-function test2() {
-    const print = s => console.log(s);
-    calc_mat([
-        [ 1, 2, 4, 1, 0, 0, 8 ],
-        [ 4, 4, 1, 0, 1, 0, 10 ],
-        [ -5, -20, 1, 0, 0, 1, 0]
-    ], print);
-}
-
-function test3() {
-    const print = s => console.log(s);
-    let objective = '10x1+3x2+x3';
-    let constrains = [
-        [ 'x1+5x2+5x3', 113 ],
-        [ 'x1+2x2+9x3', 236 ]
-    ];
-    calc(objective, constrains, print);
-}
-
-function test4() {
-    const print = s => console.log(s);
-    let objective = '2x1+3x2';
-    let constrains = [
-        [ '-2x1+x2', 14 ],
-        [ '-x1+x2', 35 ],
-        [ 'x2', 42 ]
-    ];
-    calc(objective, constrains, print);
-}
-
-function test5() {
-    const print = s => console.log(s);
-    let objective = '13x1+13x2';
-    let constrains = [
-        [ '2x1+x2', 2 ],
-        [ 'x1+2x2', 26 ]
-    ];
-    calc(objective, constrains, print);
-}
-
-//test5();
